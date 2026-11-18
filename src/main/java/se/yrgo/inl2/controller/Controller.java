@@ -9,7 +9,6 @@ import se.yrgo.inl2.entity.*;
 import se.yrgo.inl2.repository.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 // The endpoints are all over the place, so I put it in the same controller
 @RestController
@@ -64,7 +63,9 @@ public class Controller {
     // D. Return a list of customers and their vehicles
     @GetMapping("/customers")
     public ResponseEntity<List<CustomerDto>> getAllCustomers() {
-        var customers = customerRepository.findAll().stream().map(CustomerDto::createDto).toList();
+        var customers = customerRepository.findAll()
+                .stream().map(CustomerDto::createDto).toList();
+
         return ResponseEntity.ok(customers);
     }
 
@@ -103,12 +104,28 @@ public class Controller {
     // H. Update the brand for a car
     @PutMapping("/vehicles/{vehicleId}/brand")
     public ResponseEntity<VehicleDto> updateVehicleBrand(@PathVariable Long vehicleId, @RequestParam String brand) {
-        vehicleRepository.findById(vehicleId)
+        int updated = vehicleRepository.updateBrandNameById(vehicleId, brand);
+
+        if (updated == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        var vehicle = vehicleRepository.findById(vehicleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        var updatedVehicle = vehicleRepository.updateBrandNameById(vehicleId, brand);
+        return ResponseEntity.ok(VehicleDto.createDto(vehicle));
+    }
 
-        return ResponseEntity.ok(VehicleDto.createDto(updatedVehicle));
+    // I. List registration numbers and brand
+    @GetMapping("/vehicle-brand-info")
+    public ResponseEntity<List<VehicleBrandDto>> getAllVehicleBrandInfo() {
+        List<VehicleBrandProjection> vbpList = vehicleRepository.findAllRegsAndBrands();
+
+        List<VehicleBrandDto> vehicles = vbpList.stream().map(vbp ->
+                    new VehicleBrandDto(vbp.getRegistrationNumber(), vbp.getBrand())
+                ).toList();
+
+        return ResponseEntity.ok(vehicles);
     }
 
 }
