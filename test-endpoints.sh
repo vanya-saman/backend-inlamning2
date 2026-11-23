@@ -1,6 +1,15 @@
 
 #!/usr/bin/env bash
 
+echo -n "Testing connection..."
+if ! curl http://localhost:8080/vehicles >/dev/null 2>&1; then
+	echo " failed!"
+	echo "Is the server running on localhost:8080?"
+	exit 1
+fi
+
+echo " success!"
+
 BASE="http://localhost:8080"
 
 set -e
