@@ -10,7 +10,7 @@ import se.yrgo.inl2.repository.*;
 
 import java.util.List;
 
-// The endpoints are all over the place, so I put it in the same controller
+// The endpoints are all over the place, so I put everything in the same controller
 @RestController
 public class Controller {
 
