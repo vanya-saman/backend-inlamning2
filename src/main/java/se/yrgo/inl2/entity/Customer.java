@@ -1,7 +1,6 @@
 package se.yrgo.inl2.entity;
 
 import jakarta.persistence.*;
-import se.yrgo.inl2.dto.CustomerDto;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -21,7 +21,7 @@ En samling av REST-endpoints för en bilverkstad med bilar och kunder.
 - POST /vehicles - Skapa fordon med parametrar `registrationNumber` `brand` `model` `productionYear`.
 - POST /addvehicletocustomer - Koppla fordon med kund, med parametrar `customerId` och `vehicleId`
 - GET /customers - Lista alla kunder och deras bilar.
-- GET /vehicles - Lista alla bilar med regnummer och märke.
+- GET /vehicles - Lista alla bilar.
 - GET /vehicles-by-brand - Lista alla bilar av ett visst märke med parameter `brand`.
 - GET /customer-id - Sök kund med parameter `name` och få kund-id för första matchning.
 - GET /vehicle-brand-info - Lista alla bilar med regnummer och märken

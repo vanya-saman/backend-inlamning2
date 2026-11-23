@@ -17,8 +17,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query("SELECT c.vehicles FROM Customer c WHERE c.id = :id")
     List<Vehicle> findAllVehiclesBelongingToCustomer(@Param("id") Long id);
 
-    @Query("SELECT c, v FROM Customer c LEFT JOIN c.vehicles v")
-    List<Object[]> findAllCustomersAndTheirVehicles();
+    @Query("SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.vehicles")
+    List<Customer> findAllCustomersAndTheirVehicles();
 
 
 

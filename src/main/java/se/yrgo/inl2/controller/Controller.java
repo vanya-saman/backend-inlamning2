@@ -63,9 +63,8 @@ public class Controller {
     // D. Return a list of customers and their vehicles
     @GetMapping("/customers")
     public ResponseEntity<List<CustomerDto>> getAllCustomers() {
-        var customers = customerRepository.findAll()
+        var customers = customerRepository.findAllCustomersAndTheirVehicles()
                 .stream().map(CustomerDto::createDto).toList();
-
         return ResponseEntity.ok(customers);
     }
 
@@ -93,12 +92,12 @@ public class Controller {
     // G. Takes a customer name and returns ID
     // Since name is not unique, this is not a useful endpoint.
     @GetMapping("customer-id")
-    public ResponseEntity<String> getCustomer(@RequestParam String name) {
+    public ResponseEntity<CustomerIdDto> getCustomer(@RequestParam String name) {
         Customer customer = customerRepository.findFirstByName(name)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        // I think all REST responses should use JSON format.
-        return ResponseEntity.ok(String.format("{\"id\": \"%s\"}", customer.getId()));
+        // I think all REST responses should use JSON format, so I made a DTO just for ID.
+        return ResponseEntity.ok(new CustomerIdDto(customer.getId()));
     }
 
     // H. Update the brand for a car
